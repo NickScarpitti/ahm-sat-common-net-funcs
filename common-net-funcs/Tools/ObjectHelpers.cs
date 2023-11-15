@@ -8,7 +8,7 @@ namespace Common_Net_Funcs.Tools;
 /// <summary>
 /// Helper methods for complex classes and lists
 /// </summary>
-public static class ObjectHelpers
+public static partial class ObjectHelpers
 {
     /// <summary>
     /// Copy properties of the same name from one object to another
@@ -102,7 +102,7 @@ public static class ObjectHelpers
                     string? value = (string)(prop.GetValue(obj) ?? string.Empty);
                     if (!string.IsNullOrEmpty(value))
                     {
-                        value = Regex.Replace(value.Trim(), @"\s+", " "); //Replaces any multiples of spacing with a single space
+                        value = SpacingRegex().Replace(value.Trim(), " "); //Replaces any multiples of spacing with a single space
                         prop.SetValue(obj, value.Trim());
                     }
                 }
@@ -216,5 +216,23 @@ public static class ObjectHelpers
             }
         }
         return hasAttribute;
+    }
+
+    [GeneratedRegex(@"\s+")]
+    private static partial Regex SpacingRegex();
+
+    public static bool AnyFast<T>(this IList<T>? list)
+    {
+        return list?.Count > 0;
+    }
+
+    public static bool AnyFast<T>(this T[]? array)
+    {
+        return array?.Length > 0;
+    }
+
+    public static bool AnyFast<T, UT>(this Dictionary<T, UT>? dict) where T : notnull
+    {
+        return dict?.Count > 0;
     }
 }

@@ -60,7 +60,7 @@ public static class DeepCloneReflectionHelpers
         if (originalObject == null) return null;
         Type typeToReflect = originalObject.GetType();
         if (IsPrimitive(typeToReflect)) return originalObject;
-        if (visited.ContainsKey(originalObject)) return visited[originalObject];
+        if (visited.TryGetValue(originalObject, out var value)) return value;
         if (typeof(Delegate).IsAssignableFrom(typeToReflect)) return null;
         object? cloneObject = CloneMethod!.Invoke(originalObject, null);
         if (typeToReflect.IsArray)
@@ -509,7 +509,7 @@ public static class DeepCloneExpressionTreeHelpers
     }
 
     private static readonly Type FieldInfoType = typeof(FieldInfo);
-    private static readonly MethodInfo? SetValueMethod = FieldInfoType.GetMethod("SetValue", new[] { ObjectType, ObjectType });
+    private static readonly MethodInfo? SetValueMethod = FieldInfoType.GetMethod("SetValue", [ObjectType, ObjectType]);
 
     private static void ReadonlyFieldToNullExpression(FieldInfo field, ParameterExpression boxingVariable, List<Expression> expressions)
     {

@@ -49,7 +49,7 @@ public static class DataTableHelpers
                 foreach (string val in searchValue.Split(",").ToList())
                 {
                     string cleanVal = val.CleanQueryParam()!;
-                    int startPos = cleanVal.IndexOf("=") + 1;
+                    int startPos = cleanVal.IndexOf('=') + 1;
                     if (startPos == 0)
                     {
                         continue;

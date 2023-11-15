@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Json;
+﻿using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using Common_Net_Funcs.Tools;
 using Microsoft.AspNetCore.JsonPatch;
 using Newtonsoft.Json;
@@ -141,7 +142,7 @@ public static class RestHelpers
             logger.Info($"{httpMethod.ToString().ToUpper()} URL: {url}{(RequestsWithBody.Contains(httpMethod) ? $" | {(postObject != null ? SerializeObject(postObject) : patchDoc?.ReadAsStringAsync().Result)}" : string.Empty)}");
             if (httpMethod == HttpMethod.Post || httpMethod == HttpMethod.Put)
             {
-                httpRequestMessage.Content = JsonContent.Create(postObject, new("application/json"));
+                httpRequestMessage.Content = JsonContent.Create(postObject, new MediaTypeHeaderValue("application/json"));
             }
             else if (httpMethod == HttpMethod.Patch)
             {
@@ -279,7 +280,7 @@ public static class RestHelpers
             logger.Info($"{httpMethod.ToString().ToUpper()} URL: {url}{(RequestsWithBody.Contains(httpMethod) ? $" | {(postObject != null ? SerializeObject(postObject) : patchDoc?.ReadAsStringAsync().Result)}" : string.Empty)}");
             if (httpMethod == HttpMethod.Post || httpMethod == HttpMethod.Put)
             {
-                httpRequestMessage.Content = JsonContent.Create(postObject, new("application/json"));
+                httpRequestMessage.Content = JsonContent.Create(postObject, new MediaTypeHeaderValue("application/json"));
             }
             else if (httpMethod == HttpMethod.Patch)
             {
@@ -447,7 +448,7 @@ public static class RestHelpers
             }
         }
 
-        if (httpHeaders?.Any() == true)
+        if (httpHeaders?.AnyFast() == true)
         {
             foreach (KeyValuePair<string, string> header in httpHeaders)
             {
